@@ -1,0 +1,27 @@
+stages:
+  - build
+  - deploy
+
+cache:
+  paths:
+    - .cache/pip
+    - venv/
+
+#variables:
+#  DOCKER_DRIVER: overlay2
+#  DOCKER_TLS_CERTDIR: ""
+  #IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+
+build:
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker build -t $IMAGE_TAG app
+    - docker push $IMAGE_TAG
+
+deploy:
+  stage: deploy
+  script:
+    - docker pull $IMAGE_TAG
+    - docker-compose down
+    - docker-compose up -d
