@@ -1,0 +1,6 @@
+fastapi
+mlflow
+pandas
+boto3
+python-dotenv
+catboost
