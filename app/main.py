@@ -21,7 +21,6 @@ class Model:
         model_name: Name of the model in registry
         model_stage: Stage of the model
         """
-        # Load the model from Registry
         self.model = mlflow.pyfunc.load_model(f"models:/{model_name}/latest")
 
     def predict(self, data):
@@ -38,16 +37,10 @@ model = Model("clf_catboost")
 
 @app.get('/health')
 def health():
-    return 'health endpoint'
+    return {'status': 'healthy'}
 
 
-@app.post("/predict/")
-async def predict(data: dict):
-    prediction = model.predict(data)
-    return {"prediction": prediction.tolist()}
-
-
-@app.post("/invocations")
+@app.post("/predict")
 async def create_upload_file(file: UploadFile = File(...)):
     if file.filename.endswith(".csv"):
         with open(file.filename, "wb") as f:
