@@ -4,3 +4,4 @@ pandas
 boto3
 python-dotenv
 catboost
+prometheus-fastapi-instrumentator
